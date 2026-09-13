@@ -19,21 +19,17 @@ jobs:
           --remote-time \
           --fail
         TDESKTOP_FILE_CHECKSUM_AMD64="$(grep -E --max-count=1 --only-matching 'Linux 64 bit: Binary".+?sha256:[0-9a-f]+' ${{ runner.temp }}/tdesktop.expanded_assets)"
-        TDESKTOP_FILE_CHECKSUM_ARM64="$(grep -E --max-count=1 --only-matching 'Linux arm64: Binary".+?sha256:[0-9a-f]+' ${{ runner.temp }}/tdesktop.expanded_assets)"
         TDESKTOP_CHECKSUM_AMD64="sha256:${TDESKTOP_FILE_CHECKSUM_AMD64##*sha256:}"
-        TDESKTOP_CHECKSUM_ARM64="sha256:${TDESKTOP_FILE_CHECKSUM_ARM64##*sha256:}"
 
         printf 'TAG=%s
         MESSAGE<<EOF
         TDESKTOP_CHECKSUM_AMD64=%s
-        TDESKTOP_CHECKSUM_ARM64=%s
 
 
         EOF
         ' \
           "$TDESKTOP_VERSION" \
           "$TDESKTOP_CHECKSUM_AMD64" \
-          "$TDESKTOP_CHECKSUM_ARM64" \
           >>"$GITHUB_OUTPUT"
     - id: tag-exists
       run: |
