@@ -1,0 +1,128 @@
+3,4c3,4
+< name: Static (Debian, with glibc)
+< image: dhi.io/static
+---
+> name: tdesktop
+> image: ghcr.io/domini/tdesktop
+7,9c7
+<   - 20250419-glibc
+<   - 20250419-glibc-debian
+<   - 20250419-glibc-debian13
+---
+>   - '%TDESKTOP_VERSION%'
+14,15c12
+<   CA_VERSION: 20250419+dhi2
+<   VERSION: "20250419"
+---
+>   ARCH: '#{ target.platform == "linux/amd64" ? "x64" : "arm64" }'
+31d27
+<     - '!libbz2-1.0'
+35,36d30
+<     - '!libgmp10'
+<     - '!liblzma5'
+38d31
+<     - '!libmd0'
+41d33
+<     - '!libpcre2-8-0'
+44d35
+<     - '!libselinux1'
+48d38
+<     - '!libssl3t64'
+51,52d40
+<     - '!libtinfo6'
+<     - '!libzstd1'
+68d55
+<     - '!zlib1g'
+69a57
+>     - bash
+70a59,60
+>     - coreutils
+>     - libblas3
+71a62,65
+>     - libgtk-3-0t64
+>     - libopengl0
+>     - locales
+>     - sway
+72a67,75
+>     - wayvnc
+>   files:
+>     - url: https://github.com/telegramdesktop/tdesktop/releases/download/v%TDESKTOP_VERSION%/td-setup-linux-${ARCH}-%TDESKTOP_VERSION%.tar.xz
+>       checksum: %TDESKTOP_CHECKSUM%
+>       excludes:
+>         - Telegram/Updater
+>       path: /opt/tdesktop-%TDESKTOP_VERSION%/
+>       uid: 0
+>       gid: 0
+74d76
+<   root: true
+85,92c87
+< os-release:
+<   name: Docker Hardened Images (Debian)
+<   id: debian
+<   version-id: "13"
+<   version-codename: trixie
+<   pretty-name: Docker Hardened Images/Debian GNU/Linux 13 (trixie)
+<   home-url: https://docker.com/products/hardened-images/
+<   bug-report-url: https://docker.com/support/
+---
+> work-dir: /home/nonroot
+95,97c90,144
+< annotations:
+<   org.opencontainers.image.description: A minimal static image
+<   org.opencontainers.image.licenses: MPL-2.0 AND MIT
+---
+>   WLR_BACKENDS: headless
+> paths:
+>   - type: symlink
+>     path: /bin/Telegram
+>     source: /opt/tdesktop-%TDESKTOP_VERSION%/Telegram/Telegram
+>   - type: file
+>     path: /home/nonroot/.config/sway/config.d/90-10-disable-xwayland.conf
+>     content: |
+>       xwayland disable
+>     uid: 65532
+>     gid: 65532
+>   - type: file
+>     path: /home/nonroot/.config/sway/config.d/90-80-run-wayvnc.conf
+>     content: |
+>       exec /bin/wayvnc 0.0.0.0 5900
+>     uid: 65532
+>     gid: 65532
+>   - type: file
+>     path: /home/nonroot/.config/sway/config.d/90-90-run-telegram.conf
+>     content: |
+>       exec /bin/Telegram -noupdate -workdir /home/nonroot/Telegram
+>     uid: 65532
+>     gid: 65532
+>   - type: directory
+>     path: /home/nonroot/.config/wayvnc
+>     uid: 65532
+>     gid: 65532
+>     mode: '0700'
+>   - type: emptyfile
+>     path: /home/nonroot/.config/wayvnc/config
+>     uid: 65532
+>     gid: 65532
+>     mode: '0600'
+>   - type: directory
+>     path: /home/nonroot/.cache
+>     uid: 65532
+>     gid: 65532
+>   - type: directory
+>     path: /home/nonroot/Telegram
+>     uid: 65532
+>     gid: 65532
+>     mode: '0700'
+>   - type: directory
+>     path: /home/nonroot/Downloads
+>     uid: 65532
+>     gid: 65532
+>   - type: directory
+>     path: /home/nonroot/Downloads/Telegram Desktop
+>     uid: 65532
+>     gid: 65532
+>     mode: '0700'
+> entrypoint:
+>   - /bin/sway
+> ports:
+>   - 5900/tcp
