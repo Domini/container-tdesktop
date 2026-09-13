@@ -1,0 +1,58 @@
+name: Tag on update
+on:
+  schedule:
+  - cron: '*/5 * * * *'
+jobs:
+  tag-on-update:
+    runs-on: ubuntu-slim
+    permissions:
+      contents: write
+    steps:
+    - id: generate-tags
+      run: |
+        TDESKTOP_URL="$(curl --head https://github.com/telegramdesktop/tdesktop/releases/latest --write-out '%{redirect_url}' --output /dev/null --fail)"
+        TDESKTOP_VERSION="${TDESKTOP_URL##*/v}"
+
+        curl "https://github.com/telegramdesktop/tdesktop/releases/expanded_assets/v$TDESKTOP_VERSION" \
+          --output-dir ${{ runner.temp }} \
+          --output tdesktop.expanded_assets \
+          --remote-time \
+          --fail
+        TDESKTOP_FILE_CHECKSUM_AMD64="$(grep -E --max-count=1 --only-matching 'Linux 64 bit: Binary".+?sha256:[0-9a-f]+' ${{ runner.temp }}/tdesktop.expanded_assets)"
+        TDESKTOP_FILE_CHECKSUM_ARM64="$(grep -E --max-count=1 --only-matching 'Linux arm64: Binary".+?sha256:[0-9a-f]+' ${{ runner.temp }}/tdesktop.expanded_assets)"
+        TDESKTOP_CHECKSUM_AMD64="sha256:${TDESKTOP_FILE_CHECKSUM_AMD64##*sha256:}"
+        TDESKTOP_CHECKSUM_ARM64="sha256:${TDESKTOP_FILE_CHECKSUM_ARM64##*sha256:}"
+
+        printf 'TAG=%s
+        MESSAGE<<EOF
+        TDESKTOP_CHECKSUM_AMD64=%s
+        TDESKTOP_CHECKSUM_ARM64=%s
+
+
+        EOF
+        ' \
+          "$TDESKTOP_VERSION" \
+          "$TDESKTOP_CHECKSUM_AMD64" \
+          "$TDESKTOP_CHECKSUM_ARM64" \
+          >>"$GITHUB_OUTPUT"
+    - id: tag-exists
+      run: |
+        HTTP_CODE="$(curl --head "${{ github.server_url }}/${{ github.repository }}/releases/tag/${{ steps.generate-tags.outputs.TAG }}" --write-out '%{http_code}' --output /dev/null)"
+        printf 'HTTP_CODE=%s\n' "$HTTP_CODE" >>"$GITHUB_OUTPUT"
+    - if: ${{ success() && steps.tag-exists.outputs.HTTP_CODE == 404 }}
+      run: |
+        curl -X POST ${{ github.api_url }}/repos/${{ github.repository }}/git/tags \
+          -H 'Authorization: Bearer ${{ secrets.RECURSIVE_ACTIONS }}' \
+          -H 'Accept: application/vnd.github+json' \
+          --data-raw '{"tag":"${{ steps.generate-tags.outputs.TAG }}","message":"${{ steps.generate-tags.outputs.MESSAGE }}","object":"${{ github.sha }}","type":"commit"}' \
+          --output-dir ${{ runner.temp }} \
+          --output tag_create.response \
+          --remote-time \
+          --fail
+        SHA="$(jq --raw-output --exit-status '.sha' <${{ runner.temp }}/tag_create.response)"
+
+        curl -X POST ${{ github.api_url }}/repos/${{ github.repository }}/git/refs \
+          -H 'Authorization: Bearer ${{ secrets.RECURSIVE_ACTIONS }}' \
+          -H 'Accept: application/vnd.github+json' \
+          --data-raw '{"ref":"refs/tags/${{ steps.generate-tags.outputs.TAG }}","sha":"'"$SHA"'"}' \
+          --fail
