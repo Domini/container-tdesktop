@@ -1,0 +1,13 @@
+[Container]
+AutoUpdate=registry
+ContainerName=tdesktop-%i
+Image=ghcr.io/domini/tdesktop:latest
+Mount=type=tmpfs,target=/run/user/65532,chown,tmpfs-mode=0700
+Mount=type=tmpfs,target=/home/nonroot/.cache,chown,tmpfs-mode=0755
+Mount=type=volume,source=tdesktop-data@.volume,target=/home/nonroot/Telegram
+Mount=type=volume,source=tdesktop-downloads@.volume,target='/home/nonroot/Downloads/Telegram Desktop'
+Pull=newer
+ReadOnly=true
+
+[Service]
+Restart=always

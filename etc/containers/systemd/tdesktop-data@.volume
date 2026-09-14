@@ -1,0 +1,8 @@
+[Volume]
+GID=65532
+ServiceName=tdesktop-data-volume@
+UID=65532
+VolumeName=tdesktop-%i-data
+
+[Service]
+ExecStartPost=chmod a=,g=,u=rwX /var/lib/containers/storage/volumes/tdesktop-%i-data/_data
