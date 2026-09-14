@@ -10,40 +10,41 @@
 <   - 20250419-glibc-debian13
 ---
 >   - '%TDESKTOP_VERSION%'
-14,15c12
+14,15c12,13
 <   CA_VERSION: 20250419+dhi2
 <   VERSION: "20250419"
 ---
 >   ARCH: '#{ target.platform == "linux/amd64" ? "x64" : "arm64" }'
-31d27
+>   MULTIARCH_DIR: '#{ target.platform == "linux/amd64" ? "x86_64-linux-gnu" : "aarch64-linux-gnu" }'
+31d28
 <     - '!libbz2-1.0'
-35,36d30
+35,36d31
 <     - '!libgmp10'
 <     - '!liblzma5'
-38d31
+38d32
 <     - '!libmd0'
-41d33
+41d34
 <     - '!libpcre2-8-0'
-44d35
+44d36
 <     - '!libselinux1'
-48d38
+48d39
 <     - '!libssl3t64'
-51,52d40
+51,52d41
 <     - '!libtinfo6'
 <     - '!libzstd1'
-68d55
+68d56
 <     - '!zlib1g'
-69a57
+69a58
 >     - bash
-70a59,60
+70a60,61
 >     - coreutils
 >     - libblas3
-71a62,65
+71a63,66
 >     - libgtk-3-0t64
 >     - libopengl0
 >     - locales
 >     - sway
-72a67,75
+72a68,76
 >     - wayvnc
 >   files:
 >     - url: https://github.com/telegramdesktop/tdesktop/releases/download/v%TDESKTOP_VERSION%/td-setup-linux-${ARCH}-%TDESKTOP_VERSION%.tar.xz
@@ -53,9 +54,9 @@
 >       path: /opt/tdesktop-%TDESKTOP_VERSION%/
 >       uid: 0
 >       gid: 0
-74d76
+74d77
 <   root: true
-85,92c87
+85,92c88
 < os-release:
 <   name: Docker Hardened Images (Debian)
 <   id: debian
@@ -66,13 +67,19 @@
 <   bug-report-url: https://docker.com/support/
 ---
 > work-dir: /home/nonroot
-95,97c90,144
+95,97c91,151
 < annotations:
 <   org.opencontainers.image.description: A minimal static image
 <   org.opencontainers.image.licenses: MPL-2.0 AND MIT
 ---
 >   WLR_BACKENDS: headless
 > paths:
+>   - type: symlink
+>     path: /usr/lib/${MULTIARCH_DIR}/libblas.so.3
+>     source: blas/libblas.so.3
+>   - type: symlink
+>     path: /usr/lib/${MULTIARCH_DIR}/liblapack.so.3
+>     source: lapack/liblapack.so.3
 >   - type: symlink
 >     path: /bin/Telegram
 >     source: /opt/tdesktop-%TDESKTOP_VERSION%/Telegram/Telegram
