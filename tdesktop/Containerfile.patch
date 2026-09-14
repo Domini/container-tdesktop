@@ -67,7 +67,7 @@
 <   bug-report-url: https://docker.com/support/
 ---
 > work-dir: /home/nonroot
-95,97c91,168
+95,97c91,170
 < annotations:
 <   org.opencontainers.image.description: A minimal static image
 <   org.opencontainers.image.licenses: MPL-2.0 AND MIT
@@ -83,6 +83,8 @@
 >     source: lapack/liblapack.so.3
 >   - type: symlink
 >     path: /bin/Telegram
+>     uid: 0
+>     gid: 0
 >     source: /opt/tdesktop-%TDESKTOP_VERSION%/Telegram/Telegram
 >   - type: file
 >     path: /etc/sway/config.d/50-systemd-user.conf
