@@ -10,41 +10,43 @@
 <   - 20250419-glibc-debian13
 ---
 >   - '%TDESKTOP_VERSION%'
-14,15c12,13
+12d9
+<   - linux/arm64
+14,15c11,12
 <   CA_VERSION: 20250419+dhi2
 <   VERSION: "20250419"
 ---
 >   ARCH: '#{ target.platform == "linux/amd64" ? "x64" : "arm64" }'
 >   MULTIARCH_DIR: '#{ target.platform == "linux/amd64" ? "x86_64-linux-gnu" : "aarch64-linux-gnu" }'
-31d28
+31d27
 <     - '!libbz2-1.0'
-35,36d31
+35,36d30
 <     - '!libgmp10'
 <     - '!liblzma5'
-38d32
+38d31
 <     - '!libmd0'
-41d34
+41d33
 <     - '!libpcre2-8-0'
-44d36
+44d35
 <     - '!libselinux1'
-48d39
+48d38
 <     - '!libssl3t64'
-51,52d41
+51,52d40
 <     - '!libtinfo6'
 <     - '!libzstd1'
-68d56
+68d55
 <     - '!zlib1g'
-69a58
+69a57
 >     - bash
-70a60,61
+70a59,60
 >     - coreutils
 >     - libblas3
-71a63,66
+71a62,65
 >     - libgtk-3-0t64
 >     - libopengl0
 >     - locales
 >     - sway
-72a68,76
+72a67,75
 >     - wayvnc
 >   files:
 >     - url: https://github.com/telegramdesktop/tdesktop/releases/download/v%TDESKTOP_VERSION%/td-setup-linux-${ARCH}-%TDESKTOP_VERSION%.tar.xz
@@ -54,9 +56,9 @@
 >       path: /opt/tdesktop-%TDESKTOP_VERSION%/
 >       uid: 0
 >       gid: 0
-74d77
+74d76
 <   root: true
-85,92c88
+85,92c87
 < os-release:
 <   name: Docker Hardened Images (Debian)
 <   id: debian
@@ -67,7 +69,7 @@
 <   bug-report-url: https://docker.com/support/
 ---
 > work-dir: /home/nonroot
-95,97c91,170
+95,97c90,169
 < annotations:
 <   org.opencontainers.image.description: A minimal static image
 <   org.opencontainers.image.licenses: MPL-2.0 AND MIT
