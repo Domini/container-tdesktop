@@ -1,0 +1,5 @@
+[Volume]
+GID=65532
+ServiceName=tdesktop-cache-volume@
+UID=65532
+VolumeName=tdesktop-%i-cache

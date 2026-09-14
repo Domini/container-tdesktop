@@ -1,0 +1,8 @@
+[Volume]
+Device=tmpfs
+GID=65532
+Options=mode=1700,context=system_u:object_r:container_file_t:s0
+ServiceName=tdesktop-wayvnc-socket-volume@
+Type=tmpfs
+UID=65532
+VolumeName=tdesktop-%i-wayvnc-socket

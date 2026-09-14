@@ -1,0 +1,8 @@
+[Volume]
+GID=65532
+ServiceName=tdesktop-downloads-volume@
+UID=65532
+VolumeName=tdesktop-%i-downloads
+
+[Service]
+ExecStartPost=chmod a=,g=,u=rwX /var/lib/containers/storage/volumes/tdesktop-%i-downloads/_data
