@@ -83,22 +83,22 @@
 >   - type: symlink
 >     path: /bin/Telegram
 >     source: /opt/tdesktop-%TDESKTOP_VERSION%/Telegram/Telegram
+>   - type: emptyfile
+>     path: /etc/sway/config.d/50-systemd-user.conf
 >   - type: file
->     path: /home/nonroot/.config/sway/config.d/90-10-disable-xwayland.conf
+>     path: /etc/sway/config.d/90-10-disable-xwayland.conf
 >     content: |
 >       xwayland disable
->     uid: 65532
->     gid: 65532
 >   - type: file
->     path: /home/nonroot/.config/sway/config.d/90-80-run-wayvnc.conf
+>     path: /etc/sway/config.d/90-80-run-wayvnc.conf
 >     content: |
 >       exec /bin/wayvnc 0.0.0.0 5900
->     uid: 65532
->     gid: 65532
 >   - type: file
->     path: /home/nonroot/.config/sway/config.d/90-90-run-telegram.conf
+>     path: /etc/sway/config.d/90-90-run-telegram.conf
 >     content: |
 >       exec /bin/Telegram -noupdate -workdir /home/nonroot/Telegram
+>   - type: directory
+>     path: /home/nonroot/.config
 >     uid: 65532
 >     gid: 65532
 >   - type: directory
