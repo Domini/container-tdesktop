@@ -67,7 +67,7 @@
 <   bug-report-url: https://docker.com/support/
 ---
 > work-dir: /home/nonroot
-95,97c91,151
+95,97c91,166
 < annotations:
 <   org.opencontainers.image.description: A minimal static image
 <   org.opencontainers.image.licenses: MPL-2.0 AND MIT
@@ -107,6 +107,10 @@
 >     gid: 65532
 >     mode: '0600'
 >   - type: directory
+>     path: /home/nonroot/.config/sway
+>     uid: 65532
+>     gid: 65532
+>   - type: directory
 >     path: /home/nonroot/.config/wayvnc
 >     uid: 65532
 >     gid: 65532
@@ -116,6 +120,10 @@
 >     uid: 65532
 >     gid: 65532
 >     mode: '0700'
+>   - type: directory
+>     path: /home/nonroot/.config
+>     uid: 65532
+>     gid: 65532
 >   - type: directory
 >     path: /home/nonroot/.cache
 >     uid: 65532
@@ -129,6 +137,13 @@
 >     path: /home/nonroot/Downloads
 >     uid: 65532
 >     gid: 65532
+>   - type: directory
+>     path: /home/nonroot
+>     uid: 65532
+>     gid: 65532
+>     mode: '0700'
+>   - type: directory
+>     path: /home
 > entrypoint:
 >   - /bin/sway
 > ports:
