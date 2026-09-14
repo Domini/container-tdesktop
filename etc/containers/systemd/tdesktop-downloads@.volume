@@ -1,7 +1,7 @@
 [Volume]
-GID=65532
+PodmanArgs=--gid 65532
+PodmanArgs=--uid 65532
 ServiceName=tdesktop-downloads-volume@
-UID=65532
 VolumeName=tdesktop-%i-downloads
 
 [Service]
