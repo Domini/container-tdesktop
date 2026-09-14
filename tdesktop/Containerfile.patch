@@ -67,7 +67,7 @@
 <   bug-report-url: https://docker.com/support/
 ---
 > work-dir: /home/nonroot
-95,97c91,166
+95,97c91,160
 < annotations:
 <   org.opencontainers.image.description: A minimal static image
 <   org.opencontainers.image.licenses: MPL-2.0 AND MIT
@@ -84,32 +84,26 @@
 >     path: /bin/Telegram
 >     source: /opt/tdesktop-%TDESKTOP_VERSION%/Telegram/Telegram
 >   - type: file
->     path: /home/nonroot/.config/sway/config.d/90-10-disable-xwayland.conf
+>     path: /etc/sway/config.d/50-systemd-user.conf
+>     content: |
+>       #
+>   - type: file
+>     path: /etc/sway/config.d/90-10-disable-xwayland.conf
 >     content: |
 >       xwayland disable
->     uid: 65532
->     gid: 65532
 >   - type: file
->     path: /home/nonroot/.config/sway/config.d/90-80-run-wayvnc.conf
+>     path: /etc/sway/config.d/90-80-run-wayvnc.conf
 >     content: |
 >       exec /bin/wayvnc 0.0.0.0 5900
->     uid: 65532
->     gid: 65532
 >   - type: file
->     path: /home/nonroot/.config/sway/config.d/90-90-run-telegram.conf
+>     path: /etc/sway/config.d/90-90-run-telegram.conf
 >     content: |
 >       exec /bin/Telegram -noupdate -workdir /home/nonroot/Telegram
->     uid: 65532
->     gid: 65532
 >   - type: file
 >     path: /home/nonroot/.config/wayvnc/config
 >     uid: 65532
 >     gid: 65532
 >     mode: '0600'
->   - type: directory
->     path: /home/nonroot/.config/sway
->     uid: 65532
->     gid: 65532
 >   - type: directory
 >     path: /home/nonroot/.config/wayvnc
 >     uid: 65532
