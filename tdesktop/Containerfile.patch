@@ -67,12 +67,13 @@
 <   bug-report-url: https://docker.com/support/
 ---
 > work-dir: /home/nonroot
-95,97c91,160
+95,97c91,168
 < annotations:
 <   org.opencontainers.image.description: A minimal static image
 <   org.opencontainers.image.licenses: MPL-2.0 AND MIT
 ---
 >   WLR_BACKENDS: headless
+>   XDG_RUNTIME_DIR: /run/user/65532
 > paths:
 >   - type: symlink
 >     path: /usr/lib/${MULTIARCH_DIR}/libblas.so.3
@@ -138,6 +139,13 @@
 >     mode: '0700'
 >   - type: directory
 >     path: /home
+>   - type: directory
+>     path: /run/user/65532
+>     uid: 65532
+>     gid: 65532
+>     mode: '0700'
+>   - type: directory
+>     path: /run/user
 > entrypoint:
 >   - /bin/sway
 > ports:
